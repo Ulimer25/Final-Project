@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
       fileDiv.innerHTML = `
         <button class="favorites" title="Mark as Favorite"></button>
         <button class="download_button" title="Download"></button>
-        <img src="src/image_folder/pdf.svg" alt="file type" class="file_type_img">
+        <img src = "src/pdf.svg" alt="file type" class="file_type_img">
         <p class="subject_cont"><strong>Subject:</strong> ${subject}</p>
         <p class="topic_cont"><strong>Topic:</strong> ${topic}</p>
-        <img src="src/image_folder/profile_notes.svg" alt="profile" class="profile">
+        <img src="src/profile_notes.svg" alt="profile" class="profile">
         <p class="user_name_cont"><strong class="username">${username}</strong></p>
       `;
 
@@ -68,14 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function filterNotes(): void {
     const selectedYear = yearSelect.value;
     const selectedSubject = subjectInput.value;
-
+    const searchQuery = searchInput.value.toLowerCase();
 
     const filteredNotes = notes.filter((note) => {
       const matchesYear = selectedYear ? note.year === selectedYear : true;
       const matchesSubject = selectedSubject ? note.subject === selectedSubject : true;
-      
+      const matchesSearch = searchQuery ? note.subject.toLowerCase().includes(searchQuery) || note.topic.toLowerCase().includes(searchQuery) : true;
 
-      return matchesYear && matchesSubject;
+      return matchesYear && matchesSubject && matchesSearch;
     });
 
     renderNotes(filteredNotes);
@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   subjectInput.addEventListener('change', filterNotes);
+  searchInput.addEventListener('input', filterNotes);
 
   // Initial render
   renderNotes(notes);
