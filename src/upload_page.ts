@@ -1,87 +1,20 @@
+// Define the interface for a note
 interface Note {
   year: string;
   subject: string;
   topic: string;
+  fileName: string;
+  fileData: string | ArrayBuffer | null; // This field is not used in the backend API approach but retained for reference.
+  dateAdded: Date;
   username: string;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Predefined array of notes
-  const notes: Note[] = [
-    { year: 'first', subject: 'Calculus 1', topic: 'Derivatives', username: 'Ashton' },
-    { year: 'second', subject: 'Data Structures', topic: 'Trees', username: 'Joshua' },
-    { year: 'third', subject: 'Machine Learning', topic: 'Neural Networks', username: 'Leander' },
-    { year: 'fourth', subject: 'Capstone Project', topic: 'AI App', username: 'Ryan' },
-  ];
+  const uploadForm = document.getElementById('upload_form') as HTMLFormElement;
+  const yearSelect = document.getElementById('year') as HTMLSelectElement;
+  const subjectInput = document.getElementById('subject_input') as HTMLSelectElement;
 
-  const notesContainer = document.querySelector<HTMLDivElement>('.notes_container');
-  const yearSelect = document.getElementById('year') as HTMLSelectElement | null;
-  const subjectInput = document.getElementById('subject_input') as HTMLSelectElement | null;
-  const searchInput = document.querySelector<HTMLInputElement>('.search_input');
-
-  if (!notesContainer || !yearSelect || !subjectInput || !searchInput) {
-    console.error('Required DOM elements not found.');
-    return;
-  }
-
-  // Render filtered notes
-  function renderNotes(filteredNotes: Note[]): void {
-    notesContainer.innerHTML = '';
-
-    if (filteredNotes.length === 0) {
-      const noFilesMessage = document.createElement('p');
-      noFilesMessage.textContent = 'No files available for the selected filters.';
-      noFilesMessage.style.textAlign = 'center';
-      noFilesMessage.style.marginTop = '20px';
-      notesContainer.appendChild(noFilesMessage);
-      return;
-    }
-
-    filteredNotes.forEach((note) => {
-      const fileLink = document.createElement('a');
-      fileLink.href = 'file_preview_page.html';
-      fileLink.classList.add('notes_lists');
-
-      const fileDiv = document.createElement('div');
-      fileDiv.classList.add('notes_cont_box');
-
-      const subject = note.subject || 'N/A';
-      const topic = note.topic || 'N/A';
-      const username = note.username || 'Anonymous';
-
-      fileDiv.innerHTML = `
-        <button class="favorites" title="Mark as Favorite"></button>
-        <button class="download_button" title="Download"></button>
-        <img src = "src/pdf.svg" alt="file type" class="file_type_img">
-        <p class="subject_cont"><strong>Subject:</strong> ${subject}</p>
-        <p class="topic_cont"><strong>Topic:</strong> ${topic}</p>
-        <img src="src/profile_notes.svg" alt="profile" class="profile">
-        <p class="user_name_cont"><strong class="username">${username}</strong></p>
-      `;
-
-      fileLink.appendChild(fileDiv);
-      notesContainer.appendChild(fileLink);
-    });
-  }
-
-  // Filter notes based on user input
-  function filterNotes(): void {
-    const selectedYear = yearSelect.value;
-    const selectedSubject = subjectInput.value;
-    const searchQuery = searchInput.value.toLowerCase();
-
-    const filteredNotes = notes.filter((note) => {
-      const matchesYear = selectedYear ? note.year === selectedYear : true;
-      const matchesSubject = selectedSubject ? note.subject === selectedSubject : true;
-      const matchesSearch = searchQuery ? note.subject.toLowerCase().includes(searchQuery) || note.topic.toLowerCase().includes(searchQuery) : true;
-
-      return matchesYear && matchesSubject && matchesSearch;
-    });
-
-    renderNotes(filteredNotes);
-  }
-
-  // Update subjects dropdown based on selected year
+  // Function to update subjects based on the selected year
   function updateSubjects(): void {
     const year = yearSelect.value;
     let subjects: string[] = [];
@@ -104,19 +37,61 @@ document.addEventListener('DOMContentLoaded', () => {
       subjectInput.appendChild(option);
     });
 
-    subjectInput.disabled = false;
-    filterNotes();
+    subjectInput.disabled = subjects.length === 0;
   }
 
-  // Event listeners
-  yearSelect.addEventListener('change', () => {
-    updateSubjects();
-    filterNotes();
+  yearSelect.addEventListener('change', updateSubjects);
+
+  // Handle form submission with API integration
+  uploadForm.addEventListener('submit', async function (event: Event) {
+    event.preventDefault();
+
+    const year = yearSelect.value;
+    const subject = subjectInput.value;
+    const topic = (document.getElementById('topic_input') as HTMLInputElement).value;
+    const fileUpload = (document.getElementById('file_upload') as HTMLInputElement).files?.[0];
+
+    if (!year || !subject || !topic || !fileUpload) {
+      alert('Please fill all fields and select a file.');
+      return;
+    }
+
+    const username = 'Leander Galido'; // Example username
+
+    const formData = new FormData();
+    formData.append('year', year);
+    formData.append('subject', subject);
+    formData.append('topic', topic);
+    formData.append('file', fileUpload);
+    formData.append('username', username);
+
+    try {
+      const response = await fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      const note = await response.json();
+      console.log('Uploaded note:', note);
+
+      alert('File uploaded successfully!');
+      uploadForm.reset();
+      subjectInput.disabled = true; // Disable until the user selects a year
+
+      // Redirect to the home page or refresh
+      window.location.href = 'home_page.html';
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Error uploading file.');
+    }
   });
 
-  subjectInput.addEventListener('change', filterNotes);
-  searchInput.addEventListener('input', filterNotes);
-
-  // Initial render
-  renderNotes(notes);
+  // Initialize subject dropdown if a year is preselected
+  if (yearSelect.value) {
+    updateSubjects();
+  }
 });
