@@ -8,9 +8,13 @@ body {
   background-color: #ffc146;
 }
 
+.background {
+  background-color: #ffc857;
+}
+
 .welcome {
   padding-top: 5vh;
-  font-size: 6.8vh;
+  font-size: 8.8vh;
   color: white;
   margin-left: 2vw;
   margin-top: 9.6vh;
@@ -18,8 +22,8 @@ body {
 }
 
 .geniu {
-  margin-top: 1vh;
-  font-size: 12vh;
+  margin-top: -3vh;
+  font-size: 15vh;
   color: white;
   margin-left: 2vw;
   font-weight: bolder;
@@ -27,12 +31,17 @@ body {
 
 p,
 .top {
-  font-size: 2.6vh;
+  font-size: 3.6vh;
   color: white;
   margin-left: 2vw;
   font-weight: 100;
+  line-height: 2.5vh;
 }
 
+.btn-cont {
+  margin-top: 30vh;
+  margin-left: 10vw;
+}
 
 
 #loginButton {
@@ -92,4 +101,11 @@ p,
   #createAccountButton {
     margin-bottom: 10hv;
   }
+
+  .btn-cont {
+    margin-bottom: 10vh;
+    margin-top: 10vh;
+    margin-left: 0;
+  }
+
 }
