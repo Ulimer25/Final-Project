@@ -8,14 +8,14 @@ const togglePassword = document.getElementById('togglePassword') as HTMLButtonEl
 const toggleIcon = document.getElementById('toggleIcon') as HTMLImageElement;
 const profilePicture = document.getElementById('profile_picture') as HTMLInputElement;
 
-const showIcon = 'src/show.png'; // Path to show icon
-const hideIcon = 'src/hide.png'; // Path to hide sicon
+const showIcon = 'src/images/show.png'; 
+const hideIcon = 'src/images/hide.png'; 
 
-// Toggle password visibility
+
 togglePassword.addEventListener('click', function () {
   const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
   passwordInput.setAttribute('type', type);
-  toggleIcon.src = type === 'password' ? hideIcon : showIcon; // Switch icon based on visibility
+  toggleIcon.src = type === 'password' ? hideIcon : showIcon; 
 });
 
 // Handle sign-up
