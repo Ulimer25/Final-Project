@@ -449,6 +449,94 @@ body {
 }
 
 
+@media (max-width: 1024px) {
+    .large_title {
+        font-size: 6vh; 
+        margin-top: 10vh;
+    }
+
+    .sign_up_label {
+        font-size: 5vh; 
+    }
+
+    #signup_button {
+        width: 50vw; 
+        height: 7vh;
+        font-size: 2.2vh;
+    }
+
+    .form-control {
+        height: 3rem; 
+    }
+
+    .bg-white {
+        padding: 30px 20px; 
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px; 
+    }
+}
+
+@media (max-width: 768px) {
+    .large_title {
+        font-size: 6vh; 
+        margin-top: 10vh;
+    }
+
+    .sign_up_label {
+        font-size: 5vh; 
+    }
+
+    #signup_button {
+        width: 50vw;
+        height: 7vh;
+        font-size: 2.2vh;
+    }
+
+    .form-control {
+        height: 3rem;
+    }
+
+    .bg-white {
+        padding: 30px 20px; 
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px; /
+    }
+}
+
+
+@media (max-width: 480px) {
+    .large_title {
+        font-size: 5vh; 
+        margin-top: 8vh;
+    }
+
+    .sign_up_label {
+        font-size: 4.5vh;
+    }
+
+    #signup_button {
+        width: 60vw;
+        height: 8vh;
+        font-size: 2vh;
+    }
+
+    .form-control {
+        height: 2.8rem;
+    }
+
+    .bg-white {
+        padding: 20px 15px;
+    }
+}
+
+
+
 
 
   
